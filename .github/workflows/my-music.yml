@@ -8,7 +8,7 @@ on:
 
 env:
   # _____0 = IGNORE
-  YT_USER: sevcator
+  YT_USER: @sevcator
   SC_USER: sevcator
 
 jobs:
