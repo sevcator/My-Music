@@ -12,7 +12,7 @@ env:
   SC_USER: sevcator
 
 jobs:
-  download-music:
+  download:
     runs-on: ubuntu-latest
 
     steps:
@@ -42,7 +42,7 @@ jobs:
     - name: Download music from YouTube
       if: env.YT_USER != '_____0'
       run: |
-        yt-dlp --extract-audio --format-sort-force -S "abr,acodec,ext,audio_channels,asr" --embed-thumbnail --embed-metadata -o "%(uploader)s - %(title)s.%(ext)s" https://music.youtube.com/@sevcator --paths ./youtube/
+        yt-dlp --extract-audio --format-sort-force -S "abr,acodec,ext,audio_channels,asr" --embed-thumbnail --embed-metadata -o "%(uploader)s - %(title)s.%(ext)s" https://www.youtube.com/@sevcator/playlists --paths ./youtube/
 
     - name: Packing SoundCloud music into archive
       if: env.SC_USER != '_____0'
