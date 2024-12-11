@@ -1,4 +1,4 @@
-name: Download Your Music
+name: Download your music for free without software or websites
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 env:
   # _____0 = IGNORE
-  YT_USER: _____0
+  YT_USER: sevcator
   SC_USER: sevcator
 
 jobs:
