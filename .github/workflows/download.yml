@@ -45,5 +45,5 @@ jobs:
     - name: Upload SoundCloud artifact
       uses: actions/upload-artifact@v4
       with:
-        name: soundcloud-${{ env.SC_USER }}
-        path: soundcloud-${{ env.SC_USER }}.zip
+        name: soundcloud-${{ env.USER }}
+        path: soundcloud-${{ env.USER }}.zip
