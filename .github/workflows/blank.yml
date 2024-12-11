@@ -1,0 +1,73 @@
+name: Download Your Music
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  # _____0 = IGNORE
+  YT_USER: _____0
+  SC_USER: sevcator
+
+jobs:
+  download-music:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install ffmpeg
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
+
+    - name: Install yt-dlp
+      run: |
+        python -m pip install --upgrade pip
+        pip install yt-dlp
+
+    - name: Download music from SoundCloud
+      if: env.SC_USER != '_____0'
+      run: |
+        yt-dlp --extract-audio --format-sort-force -S "abr,acodec,ext,audio_channels,asr" --embed-thumbnail --embed-metadata -o "%(uploader)s - %(title)s.%(ext)s" https://www.soundcloud.com/$SC_USER/likes --paths ./soundcloud/
+
+    - name: Download music from YouTube
+      if: env.YT_USER != '_____0'
+      run: |
+        yt-dlp --extract-audio --format-sort-force -S "abr,acodec,ext,audio_channels,asr" --embed-thumbnail --embed-metadata -o "%(uploader)s - %(title)s.%(ext)s" https://www.youtube.com/$YT_USER/playlists --paths ./youtube/
+
+    - name: Packing SoundCloud music into archive
+      if: env.SC_USER != '_____0'
+      run: |
+        if [ -d ./soundcloud ] && [ "$(ls -A ./soundcloud)" ]; then
+          zip -r soundcloud-$SC_USER.zip ./soundcloud
+        fi
+
+    - name: Packing YouTube music into archive
+      if: env.YT_USER != '_____0'
+      run: |
+        if [ -d ./youtube ] && [ "$(ls -A ./youtube)" ]; then
+          zip -r youtube-$YT_USER.zip ./youtube
+        fi
+
+    - name: Upload YouTube artifact
+      if: env.YT_USER != '_____0'
+      uses: actions/upload-artifact@v4
+      with:
+        name: youtube-${{ env.YT_USER }}
+        path: youtube-${{ env.YT_USER }}.zip
+
+    - name: Upload SoundCloud artifact
+      if: env.SC_USER != '_____0'
+      uses: actions/upload-artifact@v4
+      with:
+        name: soundcloud-${{ env.SC_USER }}
+        path: soundcloud-${{ env.SC_USER }}.zip
